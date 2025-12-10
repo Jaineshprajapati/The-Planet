@@ -53,6 +53,7 @@ const starsMaterial = new THREE.MeshStandardMaterial({
 const starsSphere = new THREE.Mesh(starsGeometry, starsMaterial);
 scene.add(starsSphere);
 
+const sphereMesh = [];
 
 for (let i = 0; i < 4; i++) {
   const textureLoader = new THREE.TextureLoader();
@@ -62,7 +63,7 @@ for (let i = 0; i < 4; i++) {
   const material = new THREE.MeshStandardMaterial({ map: texture });
   const sphere = new THREE.Mesh(geometry, material);
 
-
+sphereMesh.push(sphere);
 
 
   const angle = (i / 4) * (Math.PI * 2);
@@ -76,6 +77,43 @@ for (let i = 0; i < 4; i++) {
 spheres.rotation.x = 0.1;
 spheres.position.y = -0.8;
 scene.add(spheres);
+
+let lastWheelTime = 0;
+const throttleDelay = 2000;
+let scrollCount = 0;
+
+window.addEventListener("wheel", (event) => {
+
+  const now = Date.now();
+  if (now - lastWheelTime >= throttleDelay) {
+    lastWheelTime = now;
+    const direction =  event.deltaY > 0 ? "down" : "up";
+
+    scrollCount = (scrollCount + 1) % 4;
+    console.log(scrollCount);
+   
+    const headings = document.querySelectorAll(".heading");
+    gsap.to(headings, {
+      duration: 1,
+      y: `-=${100}%`,
+      ease:"power2.inOut"
+    });
+
+    gsap.to(spheres.rotation, {
+          y: `-=${Math.PI / 2}%`,
+          duration: 1,
+          ease: 'power2.inOut',
+        });
+
+    if(scrollCount === 0){
+      gsap.to(headings, {
+        duration: 1,
+        y: `0`, 
+        ease:"power2.inOut"
+      });
+    }
+  }
+});
 
 
 // Handle resize
@@ -96,8 +134,14 @@ window.addEventListener("resize", () => {
 // }, 2500);
 
 // Animation loop
+const clock = new THREE.Clock();
 function animate() {
   requestAnimationFrame(animate);
+  const delta = clock.getDelta(); // Get time difference since last frame
+  for (let i = 0; i < sphereMesh.length; i++) {
+    const sphere = sphereMesh[i];
+    sphere.rotation.y += delta * 0.1; // Use delta, smaller speed factor
+  }
   renderer.render(scene, camera);
 }
 animate();

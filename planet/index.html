@@ -7,38 +7,51 @@
     <title>planet</title>
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
-  <body>
-    <div class="overflow-hidden w-full h-screen">
-      <!-- Import Clash Display font from Google Fonts -->
+
+  <body class="bg-black">
+    <div class="overflow-hidden w-full h-screen relative">
+
+      <!-- Font -->
       <link
         href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;700&display=swap"
         rel="stylesheet"
       />
+
+      <!-- UI Layer -->
       <div
         class="w-full h-screen absolute top-0 left-0 z-[2] text-white"
         style="font-family: 'Clash Display', sans-serif"
       >
-        <nav class="w-full flex justify-between item-centre py-10 px-10">
-          <h3>Planets</h3>
-          <div class="flex gap-6">
-            <a class="text-sm" href="#">Home</a>
-            <a class="text-sm" href="#">About</a>
-            <a class="text-sm" href="#">Contact</a>
+
+        <!-- NAVBAR -->
+        <nav class="w-full flex justify-between items-center py-8 px-10 
+                    bg-black/10 backdrop-blur-sm">
+          <h3 class="text-xl tracking-wide">Planets</h3>
+
+          <div class="hidden sm:flex gap-6">
+            <a class="text-sm opacity-80 hover:opacity-100" href="#">Home</a>
+            <a class="text-sm opacity-80 hover:opacity-100" href="#">About</a>
+            <a class="text-sm opacity-80 hover:opacity-100" href="#">Contact</a>
           </div>
         </nav>
-        <div class="absolute top-[10%] left-1/2 -translate-x-1/2 text-center">
+
+        <!-- CENTER TEXT -->
+        <div class="absolute top-[15%] left-1/2 -translate-x-1/2 text-center">
+
           <div class="w-full h-[6em] overflow-hidden">
-            <h1 class="text-6xl font-light h-full ">Csilla</h1>
-            <h1 class="text-6xl font-light h-full ">Earth</h1>
-            <h1 class="text-6xl font-light h-full">Venus</h1>
-            <h1 class="text-6xl font-light h-full">Volcanic</h1>
+            <h1 class="heading h-full font-light text-4xl sm:text-5xl md:text-6xl tracking-wide">Earth</h1>
+            <h1 class="heading h-full font-light text-4xl sm:text-5xl md:text-6xl tracking-wide">Csilla</h1>
+            <h1 class="heading h-full font-light text-4xl sm:text-5xl md:text-6xl tracking-wide">Volcanic</h1>
+            <h1 class="heading h-full font-light text-4xl sm:text-5xl md:text-6xl tracking-wide">Venus</h1>
           </div>
 
-          <p class="text-sm">lorem ipsum este bloe adwe sfjif eurtu est.</p>
         </div>
+
       </div>
+
       <canvas id="canvas"></canvas>
     </div>
+
     <script type="module" src="./src/main.js"></script>
   </body>
 </html>
