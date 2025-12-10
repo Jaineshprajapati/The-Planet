@@ -17,23 +17,21 @@ camera.position.z = 9;
 
 const loader = new RGBELoader();
 loader.load(
-  "https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/golden_gate_hills_1k.hdr",
+  "https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/moonlit_golf_1k.hdr",
   (texture) => {
     texture.mapping = THREE.EquirectangularReflectionMapping;
     scene.environment = texture;
   }
 );
 
-// Create renderer with device pixel ratio
-const renderer = new THREE.WebGLRenderer({ antialias: true });
+const canvas = document.getElementById("canvas");
+const renderer = new THREE.WebGLRenderer({ antialias: true, canvas });
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
-document.body.appendChild(renderer.domElement);
 
 const radius = 1.3;
 const segments = 64;
 const orbitRadius = 4.5;
-const colors = [0x44aa88, 0x8844aa, 0xaa8844, 0x4488aa];
 const textures = [
   "../public/csilla/color.png",
   "../public/earth/map.jpg",
@@ -43,10 +41,23 @@ const textures = [
 // Correction: add Meshes to spheres Group so GSAP will animate their rotation
 const spheres = new THREE.Group();
 
+// Create a large sphere to serve as the background with stars texture
+const starsGeometry = new THREE.SphereGeometry(50, 64, 64);
+const starsTexture = new THREE.TextureLoader().load(starsTextureUrl);
+starsTexture.colorSpace = THREE.SRGBColorSpace;
+
+const starsMaterial = new THREE.MeshStandardMaterial({
+  map: starsTexture,
+  side: THREE.BackSide
+});
+const starsSphere = new THREE.Mesh(starsGeometry, starsMaterial);
+scene.add(starsSphere);
+
+
 for (let i = 0; i < 4; i++) {
   const textureLoader = new THREE.TextureLoader();
   const texture = textureLoader.load(textures[i]);
-
+  texture.colorSpace = THREE.SRGBColorSpace;
   const geometry = new THREE.SphereGeometry(radius, segments, segments);
   const material = new THREE.MeshStandardMaterial({ map: texture });
   const sphere = new THREE.Mesh(geometry, material);
@@ -65,6 +76,7 @@ for (let i = 0; i < 4; i++) {
 spheres.rotation.x = 0.1;
 spheres.position.y = -0.8;
 scene.add(spheres);
+
 
 // Handle resize
 window.addEventListener("resize", () => {
